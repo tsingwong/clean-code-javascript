@@ -205,36 +205,25 @@ function createMicrobrewery(name = "Hipster Brew Co.") {
 
 **[⬆ 回到顶部](#目录)**
 
-## **Functions**
+## **函数**
 
-### Function arguments (2 or fewer ideally)
+### 函数参数 (理想情况下控制在两个及两个以下)
 
-Limiting the amount of function parameters is incredibly important because it
-makes testing your function easier. Having more than three leads to a
-combinatorial explosion where you have to test tons of different cases with
-each separate argument.
+限制函数参数个数是很有必要的，可以帮助我们更容易的测试函数。 一旦超过三个函数参数，会造成编写测试用例的难度增大，并需要覆盖所有的参数组合情况。
 
-One or two arguments is the ideal case, and three should be avoided if possible.
-Anything more than that should be consolidated. Usually, if you have
-more than two arguments then your function is trying to do too much. In cases
-where it's not, most of the time a higher-level object will suffice as an
-argument.
+一个或两个参数是较为理想的，尽量避免三个参数。
 
-Since JavaScript allows you to make objects on the fly, without a lot of class
-boilerplate, you can use an object if you are finding yourself needing a
-lot of arguments.
+大部分公司都会认可这一点。
 
-To make it obvious what properties the function expects, you can use the ES2015/ES6
-destructuring syntax. This has a few advantages:
+通常来说，超过两个参数的函数意味着它的功能很复杂，如果不是的话，可以将多个参数封装到一个高级对象中。
 
-1. When someone looks at the function signature, it's immediately clear what
-   properties are being used.
-2. Destructuring also clones the specified primitive values of the argument
-   object passed into the function. This can help prevent side effects. Note:
-   objects and arrays that are destructured from the argument object are NOT
-   cloned.
-3. Linters can warn you about unused properties, which would be impossible
-   without destructuring.
+JavaScript 可以允许开发者不通过类来创建对象，这给我们带了极大的方便，在遇到多个参数时，可以使用对象。
+
+为了明确函数的预期属性，可以使用 `ES2015/ES6` 的解构语法。下面是一些建议：
+
+1. 当其他人看到函数签名的时候，立即就会明白该使用什么属性。
+2. 解构会克隆（浅拷贝）函数参数对象中属性对应的值。这可以避免某些副作用影响。注意：对象和数组不会被解构克隆（浅拷贝对于数组和对象是拷贝的引用。）
+3. Linters 对于没有使用的属性会给出提醒，如果不进行解构，是不会有提醒的。
 
 **Bad:**
 
@@ -261,13 +250,9 @@ createMenu({
 
 **[⬆ 回到顶部](#目录)**
 
-### Functions should do one thing
+### 函数应该只做一件事
 
-This is by far the most important rule in software engineering. When functions
-do more than one thing, they are harder to compose, test, and reason about.
-When you can isolate a function to just one action, they can be refactored
-easily and your code will read much cleaner. If you take nothing else away from
-this guide other than this, you'll be ahead of many developers.
+这是软件工程中最重要的一条原则。当函数不仅做一件事时，他们将难以编写、测试和理解。当你将一个函数分隔为只做一个动作时，该函数将易于重构且更具可读性。如果你谨遵本指南的这条规则，你会大幅超越许多开发者。
 
 **Bad:**
 
@@ -297,7 +282,7 @@ function isActiveClient(client) {
 
 **[⬆ 回到顶部](#目录)**
 
-### Function names should say what they do
+### 函数名应该明确指出函数的功能
 
 **Bad:**
 
@@ -325,11 +310,10 @@ addMonthToDate(1, date);
 
 **[⬆ 回到顶部](#目录)**
 
-### Functions should only be one level of abstraction
+### 函数应该只做一层抽象
 
-When you have more than one level of abstraction your function is usually
-doing too much. Splitting up functions leads to reusability and easier
-testing.
+当你的函数超过一层抽象时，那通常意味着函数做了太多事情。拆分函数提供他们的重用性和测试性。
+
 
 **Bad:**
 
@@ -397,28 +381,15 @@ function parse(tokens) {
 
 **[⬆ 回到顶部](#目录)**
 
-### Remove duplicate code
+### 移除重复的代码
 
-Do your absolute best to avoid duplicate code. Duplicate code is bad because it
-means that there's more than one place to alter something if you need to change
-some logic.
+尽最大努力避免重复代码！重复代码意味着变更某些逻辑的时候，需要修改多处地方，这样是不好的。
 
-Imagine if you run a restaurant and you keep track of your inventory: all your
-tomatoes, onions, garlic, spices, etc. If you have multiple lists that
-you keep this on, then all have to be updated when you serve a dish with
-tomatoes in them. If you only have one list, there's only one place to update!
+想象一下，如果你经营一家餐厅，并记录下你的库存：所有的西红柿、洋葱、大蒜、香料等。当你端上一道菜里面有西红柿时，如果你有多个清单需要更新多个地方。如果你只有一个列表，就只有一个地方需要更新！
 
-Oftentimes you have duplicate code because you have two or more slightly
-different things, that share a lot in common, but their differences force you
-to have two or more separate functions that do much of the same things. Removing
-duplicate code means creating an abstraction that can handle this set of
-different things with just one function/module/class.
+经常有重复的代码，因为你有两个或更多的轻微不同点，有很多共同点，但是它们的不同点迫使你有两个或多个独立的函数。移除重复代码意味着创建一个抽象来处理这组函数/模块/类的不同点。
 
-Getting the abstraction right is critical, that's why you should follow the
-SOLID principles laid out in the _Classes_ section. Bad abstractions can be
-worse than duplicate code, so be careful! Having said this, if you can make
-a good abstraction, do it! Don't repeat yourself, otherwise you'll find yourself
-updating multiple places anytime you want to change one thing.
+正确的抽象是至关重要的。所以你需要遵循 类 中的坚实原则。错误的抽象可能比重复代码更糟糕，所以要小心哦。说了这些，如果你能做好抽象的话，那么放手去做吧。DRY（不要重复你自己），否则你会发现修改一个问题时，需要修改多处地方。
 
 **Bad:**
 
@@ -483,7 +454,7 @@ function showEmployeeList(employees) {
 
 **[⬆ 回到顶部](#目录)**
 
-### Set default objects with Object.assign
+### 使用 `Object.assign` 设置默认对象
 
 **Bad:**
 
@@ -536,9 +507,9 @@ createMenu(menuConfig);
 
 **[⬆ 回到顶部](#目录)**
 
-### Don't use flags as function parameters
+### 不要使用标识符作为函数参数
 
-Flags tell your user that this function does more than one thing. Functions should do one thing. Split out your functions if they are following different code paths based on a boolean.
+标识符告诉其他开发者该函数会做不只一件事。函数需要具有单一性。如果你的函数因为一个布尔值会出线不同的逻辑，那么请拆分他们。
 
 **Bad:**
 
@@ -566,22 +537,13 @@ function createTempFile(name) {
 
 **[⬆ 回到顶部](#目录)**
 
-### Avoid Side Effects (part 1)
+### 避免副作用（第一部分）
 
-A function produces a side effect if it does anything other than take a value in
-and return another value or values. A side effect could be writing to a file,
-modifying some global variable, or accidentally wiring all your money to a
-stranger.
+如果函数产生了“接受一个值并返回一个结果”之外的行为时，那么该函数就产生副作用。副作用可能是写入文件，修改全局变量或者是将你所有的钱转给陌生人。
 
-Now, you do need to have side effects in a program on occasion. Like the previous
-example, you might need to write to a file. What you want to do is to
-centralize where you are doing this. Don't have several functions and classes
-that write to a particular file. Have one service that does it. One and only one.
+现在来说，有些时候你确实需要在程序中产生副作用。例如前面的例子，写入一个文件，你需要将功能集中到一起。不要用多个函数/类修改某个文件。用且只用一个服务完成这一需求。
 
-The main point is to avoid common pitfalls like sharing state between objects
-without any structure, using mutable data types that can be written to by anything,
-and not centralizing where your side effects occur. If you can do this, you will
-be happier than the vast majority of other programmers.
+重点是避免一些常见的易犯的错误： 比如在对象之间共享状态而不使用任何结构，使用任何地方都可以写入的可变的数据类型，没有集中化导致副作用。如果你能做到这些， 那么你将会比其它的码农大军更加幸福。
 
 **Bad:**
 
@@ -615,40 +577,19 @@ console.log(newName); // ['Ryan', 'McDermott'];
 
 **[⬆ 回到顶部](#目录)**
 
-### Avoid Side Effects (part 2)
+### 避免副作用（第二部分）
 
-In JavaScript, primitives are passed by value and objects/arrays are passed by
-reference. In the case of objects and arrays, if your function makes a change
-in a shopping cart array, for example, by adding an item to purchase,
-then any other function that uses that `cart` array will be affected by this
-addition. That may be great, however it can be bad too. Let's imagine a bad
-situation:
+在 JavaScript 中，基本类型是通过值传递，对象和数组使用引用传递。对于对象和数组来说，举个栗子，你的函数通过添加一个购买项目修改了购物车数组。那么所有使用到该购物车数组的任何其他函数都会受到影响。这样是好的，但是有时候也是不好的。来一起看一下不好的情况：
 
-The user clicks the "Purchase", button which calls a `purchase` function that
-spawns a network request and sends the `cart` array to the server. Because
-of a bad network connection, the `purchase` function has to keep retrying the
-request. Now, what if in the meantime the user accidentally clicks "Add to Cart"
-button on an item they don't actually want before the network request begins?
-If that happens and the network request begins, then that purchase function
-will send the accidentally added item because it has a reference to a shopping
-cart array that the `addItemToCart` function modified by adding an unwanted
-item.
+用户单击“Purchase”按钮，该按钮调用“Purchase”函数发起网络请求并将“cart”数组发送到服务器。因为如果网络连接不好，`purchase`函数必须继续重试请求。现在，如果多个用户同时点击了“添加到购物车”怎么办在网络请求开始之前，他们实际上不想要的项目上的按钮？如果发生这种情况并且网络请求开始，那么购买功能将发送意外添加的项目，因为它具有对购物的引用
+“addItemToCart”函数通过添加不需要的物品。
 
-A great solution would be for the `addItemToCart` to always clone the `cart`,
-edit it, and return the clone. This ensures that no other functions that are
-holding onto a reference of the shopping cart will be affected by any changes.
+一个很好的解决方案是“addItemToCart”总是克隆“cart”，编辑它，然后返回克隆。这样可以确保保存购物车引用的其他功能不会受到任何更改的影响。
 
-Two caveats to mention to this approach:
+要提到这种情况的两个注意事项：
 
-1. There might be cases where you actually want to modify the input object,
-   but when you adopt this programming practice you will find that those cases
-   are pretty rare. Most things can be refactored to have no side effects!
-
-2. Cloning big objects can be very expensive in terms of performance. Luckily,
-   this isn't a big issue in practice because there are
-   [great libraries](https://facebook.github.io/immutable-js/) that allow
-   this kind of programming approach to be fast and not as memory intensive as
-   it would be for you to manually clone objects and arrays.
+1. 在某些情况下，您可能真的想要修改输入对象，但是当你采用这种编程实践时，你会发现非常罕见。大多数东西都可以重构，没有副作用！
+2. 克隆大型对象在性能方面可能非常昂贵。幸运的是，这在实践中并不是一个大问题，因为有[较优实践](https://facebook.github.io/immutable-js/)可以让克隆变得更快，而且不像手动克隆对象和数组那样占用内存。
 
 **Bad:**
 
@@ -668,7 +609,7 @@ const addItemToCart = (cart, item) => {
 
 **[⬆ 回到顶部](#目录)**
 
-### Don't write to global functions
+### 不要写入全局函数
 
 Polluting globals is a bad practice in JavaScript because you could clash with another
 library and the user of your API would be none-the-wiser until they get an
