@@ -611,15 +611,8 @@ const addItemToCart = (cart, item) => {
 
 ### 不要写入全局函数
 
-Polluting globals is a bad practice in JavaScript because you could clash with another
-library and the user of your API would be none-the-wiser until they get an
-exception in production. Let's think about an example: what if you wanted to
-extend JavaScript's native Array method to have a `diff` method that could
-show the difference between two arrays? You could write your new function
-to the `Array.prototype`, but it could clash with another library that tried
-to do the same thing. What if that other library was just using `diff` to find
-the difference between the first and last elements of an array? This is why it
-would be much better to just use ES2015/ES6 classes and simply extend the `Array` global.
+污染全局作用域在 JavaScript 中是一个糟糕的做法。因为可能会与引入的另一个库冲突，而且你的 API 调用方在生产环境中使用可能会得到一个异常。来一起看一种案例：如果你想拓展 JavaScript 中的原生 `Array`，使其支持 `diff` 函数用于展示两个数组之间的差异。你可以在 `Array.prototype` 中增加新的方法，但这么做会和其他有类似需求的库造成冲突。
+如果另一个库对 diff 的需求为比较一个数组中首尾元素间的差异呢？这就是为什么更加推荐使用 `ES2015/ES6` 中的 类，来对 `Array` 做简答继承及拓展。
 
 **Bad:**
 
@@ -643,11 +636,11 @@ class SuperArray extends Array {
 
 **[⬆ 回到顶部](#目录)**
 
-### Favor functional programming over imperative programming
+### 函数式编程优于指令式编程
 
-JavaScript isn't a functional language in the way that Haskell is, but it has
-a functional flavor to it. Functional languages can be cleaner and easier to test.
-Favor this style of programming when you can.
+JavaScript 并不是类似 Haskell 那种的函数式编程语言，但他有自己的函数式编程风格。函数式语言更加简洁清晰、易于测试。
+
+你可以使用函数式编程风格时请尽情使用。
 
 **Bad:**
 
@@ -708,7 +701,7 @@ const totalOutput = programmerOutput.reduce(
 
 **[⬆ 回到顶部](#目录)**
 
-### Encapsulate conditionals
+### 封装条件判断
 
 **Bad:**
 
@@ -732,7 +725,7 @@ if (shouldShowSpinner(fsmInstance, listNodeInstance)) {
 
 **[⬆ 回到顶部](#目录)**
 
-### Avoid negative conditionals
+### 避免否定情况的判断
 
 **Bad:**
 
@@ -760,16 +753,9 @@ if (isDOMNodePresent(node)) {
 
 **[⬆ 回到顶部](#目录)**
 
-### Avoid conditionals
+### 避免条件语句
 
-This seems like an impossible task. Upon first hearing this, most people say,
-"how am I supposed to do anything without an `if` statement?" The answer is that
-you can use polymorphism to achieve the same task in many cases. The second
-question is usually, "well that's great but why would I want to do that?" The
-answer is a previous clean code concept we learned: a function should only do
-one thing. When you have classes and functions that have `if` statements, you
-are telling your user that your function does more than one thing. Remember,
-just do one thing.
+这似乎是一项不可完成的任务。大多数人听完这条会说：“怎么可能不用`if`完成所有功能呢？”答案就是：大多数情况你可以使用多态来达到相同的功能。第二个问题在于采用这种方式的原因是什么。答案就是：前面提到过一点：函数具有单一性。当你的类和方法中存在`if`语句，那其实是在高速用户你的函数不仅做一件事。记住，只做一件事！
 
 **Bad:**
 
@@ -820,12 +806,9 @@ class Cessna extends Airplane {
 
 **[⬆ 回到顶部](#目录)**
 
-### Avoid type-checking (part 1)
+### 避免类型检查 (第一部分)
 
-JavaScript is untyped, which means your functions can take any type of argument.
-Sometimes you are bitten by this freedom and it becomes tempting to do
-type-checking in your functions. There are many ways to avoid having to do this.
-The first thing to consider is consistent APIs.
+JavaScript 是一门弱类型语言，这意味着你的函数能接受任何类型的参数。 但是有时又会被这种自由所伤害， 于是又尝试在你的函数中做类型检查。其实有很多方法可以避免这个，第一个要考虑的是一致的 API。
 
 **Bad:**
 
@@ -849,17 +832,9 @@ function travelToTexas(vehicle) {
 
 **[⬆ 回到顶部](#目录)**
 
-### Avoid type-checking (part 2)
+### 避免类型检查 (第二部分)
 
-If you are working with basic primitive values like strings and integers,
-and you can't use polymorphism but you still feel the need to type-check,
-you should consider using TypeScript. It is an excellent alternative to normal
-JavaScript, as it provides you with static typing on top of standard JavaScript
-syntax. The problem with manually type-checking normal JavaScript is that
-doing it well requires so much extra verbiage that the faux "type-safety" you get
-doesn't make up for the lost readability. Keep your JavaScript clean, write
-good tests, and have good code reviews. Otherwise, do all of that but with
-TypeScript (which, like I said, is a great alternative!).
+如果需处理的数据为字符串，整型，数组等类型，无法使用多态并仍有必要对其进行类型检测时，你可以考虑使用 TypeScript。 它是一个常规 JavaScript 的优秀的替代品， 因为它在标准的 JavaScript 语法之上为你提供静态类型。 对常规 JavaScript 做人工类型检查的问题是需要大量的冗词来仿造类型安 全而不缺失可读性。 保持你的 JavaScript 简洁，编写良好的测试，并有良好的代码审阅。另外使用 TypeScript （就像我说的， 它是一个伟大的替代品）来完成这些。
 
 **Bad:**
 
@@ -878,21 +853,17 @@ function combine(val1, val2) {
 
 **Good:**
 
-```javascript
-function combine(val1, val2) {
+```typescript
+function combine(val1: number, val2: number) {
   return val1 + val2;
 }
 ```
 
 **[⬆ 回到顶部](#目录)**
 
-### Don't over-optimize
+### 不要过度优化
 
-Modern browsers do a lot of optimization under-the-hood at runtime. A lot of
-times, if you are optimizing then you are just wasting your time. [There are good
-resources](https://github.com/petkaantonov/bluebird/wiki/Optimization-killers)
-for seeing where optimization is lacking. Target those in the meantime, until
-they are fixed if they can be.
+现代的浏览器在运行时会对代码自动进行优化。大部分时间，你所做的优化其实是在浪费时间。这些是一些[好的案例](https://github.com/petkaantonov/bluebird/wiki/Optimization-killers)，可以查看那些地方需要优化。 为这些而优化， 直到他们被修正。
 
 **Bad:**
 
@@ -914,8 +885,9 @@ for (let i = 0; i < list.length; i++) {
 
 **[⬆ 回到顶部](#目录)**
 
-### Remove dead code
+### 移除僵尸代码
 
+僵尸代码同冗余代码一样糟糕。我们没有理由容忍他们活在代码中。如果它没有被调用，那么删除它。等到需要它们的时候，可以从历史版本中找到它们。
 Dead code is just as bad as duplicate code. There's no reason to keep it in
 your codebase. If it's not being called, get rid of it! It will still be safe
 in your version history if you still need it.
@@ -948,7 +920,7 @@ inventoryTracker("apples", req, "www.inventory-awesome.io");
 
 **[⬆ 回到顶部](#目录)**
 
-## **Objects and Data Structures**
+## **对象和数据结构**
 
 ### Use getters and setters
 
