@@ -1,38 +1,51 @@
-# clean-code-javascript 中文版
+# clean-code-javascript
 
-## 目录
+## Table of Contents
 
-1. [简介](#简介)
-2. [变量](#变量)
-3. [函数](#函数)
-4. [对象与数据结构](#对象与数据结构)
-5. [类](#类)
+1. [Introduction](#introduction)
+2. [Variables](#variables)
+3. [Functions](#functions)
+4. [Objects and Data Structures](#objects-and-data-structures)
+5. [Classes](#classes)
 6. [SOLID](#solid)
-7. [测试](#测试)
+7. [Testing](#testing)
 8. [Concurrency](#concurrency)
-9. [异常监控]](#异常监控)
-10. [格式化](#格式化)
-11. [注释](#注释)
-12. [翻译](#翻译)
+9. [Error Handling](#error-handling)
+10. [Formatting](#formatting)
+11. [Comments](#comments)
+12. [Translation](#translation)
 
-## 简介
+## Introduction
 
 ![Humorous image of software quality estimation as a count of how many expletives
 you shout when reading code](https://www.osnews.com/images/comics/wtfm.jpg)
 
-将 Robert C. Martin 的
-[代码整洁之道](https://www.amazon.com/Clean-Code-Handbook-Software-Craftsmanship/dp/0132350882) 书中的软件工程原则应用于 JavaScript 这门语言. 这并不是一个风格指南。 它是一份能够帮助你写出[可读性、易用性和易重构](https://github.com/ryanmcdermott/3rs-of-software-architecture)的 JavaScript 代码。
+Software engineering principles, from Robert C. Martin's book
+[_Clean Code_](https://www.amazon.com/Clean-Code-Handbook-Software-Craftsmanship/dp/0132350882),
+adapted for JavaScript. This is not a style guide. It's a guide to producing
+[readable, reusable, and refactorable](https://github.com/ryanmcdermott/3rs-of-software-architecture) software in JavaScript.
 
-这里的每一条规则并非一定要遵循，甚至只有少部分会被广泛认知。虽然这些是《代码简洁之道》作者多年经验的结晶，但这些也只是指导建议而已。
+Not every principle herein has to be strictly followed, and even fewer will be
+universally agreed upon. These are guidelines and nothing more, but they are
+ones codified over many years of collective experience by the authors of
+_Clean Code_.
 
-人类的软件开发行业也只是经过 50 多年，仍然还需要我们继续学习。当软件行业跟建筑行业一样历史悠久的时候，我们就会存在一些严格遵守的规定。但现在，那些指导建议只是为了让你和你的团队生产出更加更有质量的 JavaScript 代码。
+Our craft of software engineering is just a bit over 50 years old, and we are
+still learning a lot. When software architecture is as old as architecture
+itself, maybe then we will have harder rules to follow. For now, let these
+guidelines serve as a touchstone by which to assess the quality of the
+JavaScript code that you and your team produce.
 
-需要知道的是：了解他并不能使你成为一名优秀的软件工程师，多年践行这些规则也并不意味着你不会犯错。合抱之木，生于毫末；九层之台，起于累土。最后，我们需要经常和同事们 code review，不断优化代码。不要因为最初的代码需要修改而自责。而是加油对那些代码下手。
+One more thing: knowing these won't immediately make you a better software
+developer, and working with them for many years doesn't mean you won't make
+mistakes. Every piece of code starts as a first draft, like wet clay getting
+shaped into its final form. Finally, we chisel away the imperfections when
+we review it with our peers. Don't beat yourself up for first drafts that need
+improvement. Beat up the code instead!
 
+## **Variables**
 
-## **变量**
-
-### 使用有意义且可读性强的变量名
+### Use meaningful and pronounceable variable names
 
 **Bad:**
 
@@ -46,9 +59,9 @@ const yyyymmdstr = moment().format("YYYY/MM/DD");
 const currentDate = moment().format("YYYY/MM/DD");
 ```
 
-**[⬆ 回到顶部](#目录)**
+**[⬆ back to top](#table-of-contents)**
 
-### 功能类似的变量名统一风格
+### Use the same vocabulary for the same type of variable
 
 **Bad:**
 
@@ -64,32 +77,37 @@ getCustomerRecord();
 getUser();
 ```
 
-**[⬆ 回到顶部](#目录)**
+**[⬆ back to top](#table-of-contents)**
 
-### 使用易于检索的变量名
+### Use searchable names
 
-我们阅读代码的数量比写的数量多得多。所以我们写出来代码的可读性和可检索性是非常重要的。阅读和理解那些变量名晦涩难懂的代码，对于读者的体验是极差的。所以让你的代码更具有可检索性。可以使用 [buddy.js](https://github.com/danielstjules/buddy.js) 和
-[ESLint](https://github.com/eslint/eslint/blob/660e0918933e6e7fede26bc675a0763a6b357c94/docs/rules/no-magic-numbers.md) 来帮助我们找到未命名的常量。
+We will read more code than we will ever write. It's important that the code we
+do write is readable and searchable. By _not_ naming variables that end up
+being meaningful for understanding our program, we hurt our readers.
+Make your names searchable. Tools like
+[buddy.js](https://github.com/danielstjules/buddy.js) and
+[ESLint](https://github.com/eslint/eslint/blob/660e0918933e6e7fede26bc675a0763a6b357c94/docs/rules/no-magic-numbers.md)
+can help identify unnamed constants.
 
 **Bad:**
 
 ```javascript
-// 这里的 86400000 是什么意思？？？
+// What the heck is 86400000 for?
 setTimeout(blastOff, 86400000);
 ```
 
 **Good:**
 
 ```javascript
-// 用大写字母来声明常量
+// Declare them as capitalized named constants.
 const MILLISECONDS_IN_A_DAY = 86400000;
 
 setTimeout(blastOff, MILLISECONDS_IN_A_DAY);
 ```
 
-**[⬆ 回到顶部](#目录)**
+**[⬆ back to top](#table-of-contents)**
 
-### 使用解释性的变量名
+### Use explanatory variables
 
 **Bad:**
 
@@ -111,11 +129,11 @@ const [, city, zipCode] = address.match(cityZipCodeRegex) || [];
 saveCityZipCode(city, zipCode);
 ```
 
-**[⬆ 回到顶部](#目录)**
+**[⬆ back to top](#table-of-contents)**
 
-### 避免精神分裂
+### Avoid Mental Mapping
 
-显式优于隐式。
+Explicit is better than implicit.
 
 **Bad:**
 
@@ -127,7 +145,7 @@ locations.forEach(l => {
   // ...
   // ...
   // ...
-  // 等等，l 究竟代表的是什么？？？
+  // Wait, what is `l` for again?
   dispatch(l);
 });
 ```
@@ -146,11 +164,12 @@ locations.forEach(location => {
 });
 ```
 
-**[⬆ 回到顶部](#目录)**
+**[⬆ back to top](#table-of-contents)**
 
-### 不要过分描述
+### Don't add unneeded context
 
-如果你的 类/对象名已经有意义了，请不要在属性名中重复了。
+If your class/object name tells you something, don't repeat that in your
+variable name.
 
 **Bad:**
 
@@ -180,11 +199,14 @@ function paintCar(car) {
 }
 ```
 
-**[⬆ 回到顶部](#目录)**
+**[⬆ back to top](#table-of-contents)**
 
-### 使用默认参数来替代短路运算及条件判断
+### Use default arguments instead of short circuiting or conditionals
 
-通常来说，默认参数是会被短路运算更简洁的。当你意识到使用他们时，你的函数可能只会为 `undefined` 提供默认参数，其他（如 `''`，`""`，`false`，`null`，`0`，`NaN`）的 假值（"falsy"）不会被替换为默认参数。
+Default arguments are often cleaner than short circuiting. Be aware that if you
+use them, your function will only provide default values for `undefined`
+arguments. Other "falsy" values such as `''`, `""`, `false`, `null`, `0`, and
+`NaN`, will not be replaced by a default value.
 
 **Bad:**
 
@@ -203,27 +225,38 @@ function createMicrobrewery(name = "Hipster Brew Co.") {
 }
 ```
 
-**[⬆ 回到顶部](#目录)**
+**[⬆ back to top](#table-of-contents)**
 
-## **函数**
+## **Functions**
 
-### 函数参数 (理想情况下控制在两个及两个以下)
+### Function arguments (2 or fewer ideally)
 
-限制函数参数个数是很有必要的，可以帮助我们更容易的测试函数。 一旦超过三个函数参数，会造成编写测试用例的难度增大，并需要覆盖所有的参数组合情况。
+Limiting the amount of function parameters is incredibly important because it
+makes testing your function easier. Having more than three leads to a
+combinatorial explosion where you have to test tons of different cases with
+each separate argument.
 
-一个或两个参数是较为理想的，尽量避免三个参数。
+One or two arguments is the ideal case, and three should be avoided if possible.
+Anything more than that should be consolidated. Usually, if you have
+more than two arguments then your function is trying to do too much. In cases
+where it's not, most of the time a higher-level object will suffice as an
+argument.
 
-大部分公司都会认可这一点。
+Since JavaScript allows you to make objects on the fly, without a lot of class
+boilerplate, you can use an object if you are finding yourself needing a
+lot of arguments.
 
-通常来说，超过两个参数的函数意味着它的功能很复杂，如果不是的话，可以将多个参数封装到一个高级对象中。
+To make it obvious what properties the function expects, you can use the ES2015/ES6
+destructuring syntax. This has a few advantages:
 
-JavaScript 可以允许开发者不通过类来创建对象，这给我们带了极大的方便，在遇到多个参数时，可以使用对象。
-
-为了明确函数的预期属性，可以使用 `ES2015/ES6` 的解构语法。下面是一些建议：
-
-1. 当其他人看到函数签名的时候，立即就会明白该使用什么属性。
-2. 解构会克隆（浅拷贝）函数参数对象中属性对应的值。这可以避免某些副作用影响。注意：对象和数组不会被解构克隆（浅拷贝对于数组和对象是拷贝的引用。）
-3. Linters 对于没有使用的属性会给出提醒，如果不进行解构，是不会有提醒的。
+1. When someone looks at the function signature, it's immediately clear what
+   properties are being used.
+2. Destructuring also clones the specified primitive values of the argument
+   object passed into the function. This can help prevent side effects. Note:
+   objects and arrays that are destructured from the argument object are NOT
+   cloned.
+3. Linters can warn you about unused properties, which would be impossible
+   without destructuring.
 
 **Bad:**
 
@@ -248,11 +281,15 @@ createMenu({
 });
 ```
 
-**[⬆ 回到顶部](#目录)**
+**[⬆ back to top](#table-of-contents)**
 
-### 函数应该只做一件事
+### Functions should do one thing
 
-这是软件工程中最重要的一条原则。当函数不仅做一件事时，他们将难以编写、测试和理解。当你将一个函数分隔为只做一个动作时，该函数将易于重构且更具可读性。如果你谨遵本指南的这条规则，你会大幅超越许多开发者。
+This is by far the most important rule in software engineering. When functions
+do more than one thing, they are harder to compose, test, and reason about.
+When you can isolate a function to just one action, they can be refactored
+easily and your code will read much cleaner. If you take nothing else away from
+this guide other than this, you'll be ahead of many developers.
 
 **Bad:**
 
@@ -280,9 +317,9 @@ function isActiveClient(client) {
 }
 ```
 
-**[⬆ 回到顶部](#目录)**
+**[⬆ back to top](#table-of-contents)**
 
-### 函数名应该明确指出函数的功能
+### Function names should say what they do
 
 **Bad:**
 
@@ -308,12 +345,13 @@ const date = new Date();
 addMonthToDate(1, date);
 ```
 
-**[⬆ 回到顶部](#目录)**
+**[⬆ back to top](#table-of-contents)**
 
-### 函数应该只做一层抽象
+### Functions should only be one level of abstraction
 
-当你的函数超过一层抽象时，那通常意味着函数做了太多事情。拆分函数提供他们的重用性和测试性。
-
+When you have more than one level of abstraction your function is usually
+doing too much. Splitting up functions leads to reusability and easier
+testing.
 
 **Bad:**
 
@@ -379,17 +417,30 @@ function parse(tokens) {
 }
 ```
 
-**[⬆ 回到顶部](#目录)**
+**[⬆ back to top](#table-of-contents)**
 
-### 移除重复的代码
+### Remove duplicate code
 
-尽最大努力避免重复代码！重复代码意味着变更某些逻辑的时候，需要修改多处地方，这样是不好的。
+Do your absolute best to avoid duplicate code. Duplicate code is bad because it
+means that there's more than one place to alter something if you need to change
+some logic.
 
-想象一下，如果你经营一家餐厅，并记录下你的库存：所有的西红柿、洋葱、大蒜、香料等。当你端上一道菜里面有西红柿时，如果你有多个清单需要更新多个地方。如果你只有一个列表，就只有一个地方需要更新！
+Imagine if you run a restaurant and you keep track of your inventory: all your
+tomatoes, onions, garlic, spices, etc. If you have multiple lists that
+you keep this on, then all have to be updated when you serve a dish with
+tomatoes in them. If you only have one list, there's only one place to update!
 
-经常有重复的代码，因为你有两个或更多的轻微不同点，有很多共同点，但是它们的不同点迫使你有两个或多个独立的函数。移除重复代码意味着创建一个抽象来处理这组函数/模块/类的不同点。
+Oftentimes you have duplicate code because you have two or more slightly
+different things, that share a lot in common, but their differences force you
+to have two or more separate functions that do much of the same things. Removing
+duplicate code means creating an abstraction that can handle this set of
+different things with just one function/module/class.
 
-正确的抽象是至关重要的。所以你需要遵循 类 中的坚实原则。错误的抽象可能比重复代码更糟糕，所以要小心哦。说了这些，如果你能做好抽象的话，那么放手去做吧。DRY（不要重复你自己），否则你会发现修改一个问题时，需要修改多处地方。
+Getting the abstraction right is critical, that's why you should follow the
+SOLID principles laid out in the _Classes_ section. Bad abstractions can be
+worse than duplicate code, so be careful! Having said this, if you can make
+a good abstraction, do it! Don't repeat yourself, otherwise you'll find yourself
+updating multiple places anytime you want to change one thing.
 
 **Bad:**
 
@@ -452,9 +503,9 @@ function showEmployeeList(employees) {
 }
 ```
 
-**[⬆ 回到顶部](#目录)**
+**[⬆ back to top](#table-of-contents)**
 
-### 使用 `Object.assign` 设置默认对象
+### Set default objects with Object.assign
 
 **Bad:**
 
@@ -505,11 +556,11 @@ function createMenu(config) {
 createMenu(menuConfig);
 ```
 
-**[⬆ 回到顶部](#目录)**
+**[⬆ back to top](#table-of-contents)**
 
-### 不要使用标识符作为函数参数
+### Don't use flags as function parameters
 
-标识符告诉其他开发者该函数会做不只一件事。函数需要具有单一性。如果你的函数因为一个布尔值会出线不同的逻辑，那么请拆分他们。
+Flags tell your user that this function does more than one thing. Functions should do one thing. Split out your functions if they are following different code paths based on a boolean.
 
 **Bad:**
 
@@ -535,15 +586,24 @@ function createTempFile(name) {
 }
 ```
 
-**[⬆ 回到顶部](#目录)**
+**[⬆ back to top](#table-of-contents)**
 
-### 避免副作用（第一部分）
+### Avoid Side Effects (part 1)
 
-如果函数产生了“接受一个值并返回一个结果”之外的行为时，那么该函数就产生副作用。副作用可能是写入文件，修改全局变量或者是将你所有的钱转给陌生人。
+A function produces a side effect if it does anything other than take a value in
+and return another value or values. A side effect could be writing to a file,
+modifying some global variable, or accidentally wiring all your money to a
+stranger.
 
-现在来说，有些时候你确实需要在程序中产生副作用。例如前面的例子，写入一个文件，你需要将功能集中到一起。不要用多个函数/类修改某个文件。用且只用一个服务完成这一需求。
+Now, you do need to have side effects in a program on occasion. Like the previous
+example, you might need to write to a file. What you want to do is to
+centralize where you are doing this. Don't have several functions and classes
+that write to a particular file. Have one service that does it. One and only one.
 
-重点是避免一些常见的易犯的错误： 比如在对象之间共享状态而不使用任何结构，使用任何地方都可以写入的可变的数据类型，没有集中化导致副作用。如果你能做到这些， 那么你将会比其它的码农大军更加幸福。
+The main point is to avoid common pitfalls like sharing state between objects
+without any structure, using mutable data types that can be written to by anything,
+and not centralizing where your side effects occur. If you can do this, you will
+be happier than the vast majority of other programmers.
 
 **Bad:**
 
@@ -575,21 +635,42 @@ console.log(name); // 'Ryan McDermott';
 console.log(newName); // ['Ryan', 'McDermott'];
 ```
 
-**[⬆ 回到顶部](#目录)**
+**[⬆ back to top](#table-of-contents)**
 
-### 避免副作用（第二部分）
+### Avoid Side Effects (part 2)
 
-在 JavaScript 中，基本类型是通过值传递，对象和数组使用引用传递。对于对象和数组来说，举个栗子，你的函数通过添加一个购买项目修改了购物车数组。那么所有使用到该购物车数组的任何其他函数都会受到影响。这样是好的，但是有时候也是不好的。来一起看一下不好的情况：
+In JavaScript, primitives are passed by value and objects/arrays are passed by
+reference. In the case of objects and arrays, if your function makes a change
+in a shopping cart array, for example, by adding an item to purchase,
+then any other function that uses that `cart` array will be affected by this
+addition. That may be great, however it can be bad too. Let's imagine a bad
+situation:
 
-用户单击“Purchase”按钮，该按钮调用“Purchase”函数发起网络请求并将“cart”数组发送到服务器。因为如果网络连接不好，`purchase`函数必须继续重试请求。现在，如果多个用户同时点击了“添加到购物车”怎么办在网络请求开始之前，他们实际上不想要的项目上的按钮？如果发生这种情况并且网络请求开始，那么购买功能将发送意外添加的项目，因为它具有对购物的引用
-“addItemToCart”函数通过添加不需要的物品。
+The user clicks the "Purchase", button which calls a `purchase` function that
+spawns a network request and sends the `cart` array to the server. Because
+of a bad network connection, the `purchase` function has to keep retrying the
+request. Now, what if in the meantime the user accidentally clicks "Add to Cart"
+button on an item they don't actually want before the network request begins?
+If that happens and the network request begins, then that purchase function
+will send the accidentally added item because it has a reference to a shopping
+cart array that the `addItemToCart` function modified by adding an unwanted
+item.
 
-一个很好的解决方案是“addItemToCart”总是克隆“cart”，编辑它，然后返回克隆。这样可以确保保存购物车引用的其他功能不会受到任何更改的影响。
+A great solution would be for the `addItemToCart` to always clone the `cart`,
+edit it, and return the clone. This ensures that no other functions that are
+holding onto a reference of the shopping cart will be affected by any changes.
 
-要提到这种情况的两个注意事项：
+Two caveats to mention to this approach:
 
-1. 在某些情况下，您可能真的想要修改输入对象，但是当你采用这种编程实践时，你会发现非常罕见。大多数东西都可以重构，没有副作用！
-2. 克隆大型对象在性能方面可能非常昂贵。幸运的是，这在实践中并不是一个大问题，因为有[较优实践](https://facebook.github.io/immutable-js/)可以让克隆变得更快，而且不像手动克隆对象和数组那样占用内存。
+1. There might be cases where you actually want to modify the input object,
+   but when you adopt this programming practice you will find that those cases
+   are pretty rare. Most things can be refactored to have no side effects!
+
+2. Cloning big objects can be very expensive in terms of performance. Luckily,
+   this isn't a big issue in practice because there are
+   [great libraries](https://facebook.github.io/immutable-js/) that allow
+   this kind of programming approach to be fast and not as memory intensive as
+   it would be for you to manually clone objects and arrays.
 
 **Bad:**
 
@@ -607,12 +688,19 @@ const addItemToCart = (cart, item) => {
 };
 ```
 
-**[⬆ 回到顶部](#目录)**
+**[⬆ back to top](#table-of-contents)**
 
-### 不要写入全局函数
+### Don't write to global functions
 
-污染全局作用域在 JavaScript 中是一个糟糕的做法。因为可能会与引入的另一个库冲突，而且你的 API 调用方在生产环境中使用可能会得到一个异常。来一起看一种案例：如果你想拓展 JavaScript 中的原生 `Array`，使其支持 `diff` 函数用于展示两个数组之间的差异。你可以在 `Array.prototype` 中增加新的方法，但这么做会和其他有类似需求的库造成冲突。
-如果另一个库对 diff 的需求为比较一个数组中首尾元素间的差异呢？这就是为什么更加推荐使用 `ES2015/ES6` 中的 类，来对 `Array` 做简答继承及拓展。
+Polluting globals is a bad practice in JavaScript because you could clash with another
+library and the user of your API would be none-the-wiser until they get an
+exception in production. Let's think about an example: what if you wanted to
+extend JavaScript's native Array method to have a `diff` method that could
+show the difference between two arrays? You could write your new function
+to the `Array.prototype`, but it could clash with another library that tried
+to do the same thing. What if that other library was just using `diff` to find
+the difference between the first and last elements of an array? This is why it
+would be much better to just use ES2015/ES6 classes and simply extend the `Array` global.
 
 **Bad:**
 
@@ -634,13 +722,13 @@ class SuperArray extends Array {
 }
 ```
 
-**[⬆ 回到顶部](#目录)**
+**[⬆ back to top](#table-of-contents)**
 
-### 函数式编程优于指令式编程
+### Favor functional programming over imperative programming
 
-JavaScript 并不是类似 Haskell 那种的函数式编程语言，但他有自己的函数式编程风格。函数式语言更加简洁清晰、易于测试。
-
-你可以使用函数式编程风格时请尽情使用。
+JavaScript isn't a functional language in the way that Haskell is, but it has
+a functional flavor to it. Functional languages can be cleaner and easier to test.
+Favor this style of programming when you can.
 
 **Bad:**
 
@@ -699,9 +787,9 @@ const totalOutput = programmerOutput.reduce(
 );
 ```
 
-**[⬆ 回到顶部](#目录)**
+**[⬆ back to top](#table-of-contents)**
 
-### 封装条件判断
+### Encapsulate conditionals
 
 **Bad:**
 
@@ -723,9 +811,9 @@ if (shouldShowSpinner(fsmInstance, listNodeInstance)) {
 }
 ```
 
-**[⬆ 回到顶部](#目录)**
+**[⬆ back to top](#table-of-contents)**
 
-### 避免否定情况的判断
+### Avoid negative conditionals
 
 **Bad:**
 
@@ -751,11 +839,18 @@ if (isDOMNodePresent(node)) {
 }
 ```
 
-**[⬆ 回到顶部](#目录)**
+**[⬆ back to top](#table-of-contents)**
 
-### 避免条件语句
+### Avoid conditionals
 
-这似乎是一项不可完成的任务。大多数人听完这条会说：“怎么可能不用`if`完成所有功能呢？”答案就是：大多数情况你可以使用多态来达到相同的功能。第二个问题在于采用这种方式的原因是什么。答案就是：前面提到过一点：函数具有单一性。当你的类和方法中存在`if`语句，那其实是在高速用户你的函数不仅做一件事。记住，只做一件事！
+This seems like an impossible task. Upon first hearing this, most people say,
+"how am I supposed to do anything without an `if` statement?" The answer is that
+you can use polymorphism to achieve the same task in many cases. The second
+question is usually, "well that's great but why would I want to do that?" The
+answer is a previous clean code concept we learned: a function should only do
+one thing. When you have classes and functions that have `if` statements, you
+are telling your user that your function does more than one thing. Remember,
+just do one thing.
 
 **Bad:**
 
@@ -804,11 +899,14 @@ class Cessna extends Airplane {
 }
 ```
 
-**[⬆ 回到顶部](#目录)**
+**[⬆ back to top](#table-of-contents)**
 
-### 避免类型检查 (第一部分)
+### Avoid type-checking (part 1)
 
-JavaScript 是一门弱类型语言，这意味着你的函数能接受任何类型的参数。 但是有时又会被这种自由所伤害， 于是又尝试在你的函数中做类型检查。其实有很多方法可以避免这个，第一个要考虑的是一致的 API。
+JavaScript is untyped, which means your functions can take any type of argument.
+Sometimes you are bitten by this freedom and it becomes tempting to do
+type-checking in your functions. There are many ways to avoid having to do this.
+The first thing to consider is consistent APIs.
 
 **Bad:**
 
@@ -830,11 +928,19 @@ function travelToTexas(vehicle) {
 }
 ```
 
-**[⬆ 回到顶部](#目录)**
+**[⬆ back to top](#table-of-contents)**
 
-### 避免类型检查 (第二部分)
+### Avoid type-checking (part 2)
 
-如果需处理的数据为字符串，整型，数组等类型，无法使用多态并仍有必要对其进行类型检测时，你可以考虑使用 TypeScript。 它是一个常规 JavaScript 的优秀的替代品， 因为它在标准的 JavaScript 语法之上为你提供静态类型。 对常规 JavaScript 做人工类型检查的问题是需要大量的冗词来仿造类型安 全而不缺失可读性。 保持你的 JavaScript 简洁，编写良好的测试，并有良好的代码审阅。另外使用 TypeScript （就像我说的， 它是一个伟大的替代品）来完成这些。
+If you are working with basic primitive values like strings and integers,
+and you can't use polymorphism but you still feel the need to type-check,
+you should consider using TypeScript. It is an excellent alternative to normal
+JavaScript, as it provides you with static typing on top of standard JavaScript
+syntax. The problem with manually type-checking normal JavaScript is that
+doing it well requires so much extra verbiage that the faux "type-safety" you get
+doesn't make up for the lost readability. Keep your JavaScript clean, write
+good tests, and have good code reviews. Otherwise, do all of that but with
+TypeScript (which, like I said, is a great alternative!).
 
 **Bad:**
 
@@ -853,17 +959,21 @@ function combine(val1, val2) {
 
 **Good:**
 
-```typescript
-function combine(val1: number, val2: number) {
+```javascript
+function combine(val1, val2) {
   return val1 + val2;
 }
 ```
 
-**[⬆ 回到顶部](#目录)**
+**[⬆ back to top](#table-of-contents)**
 
-### 不要过度优化
+### Don't over-optimize
 
-现代的浏览器在运行时会对代码自动进行优化。大部分时间，你所做的优化其实是在浪费时间。这些是一些[好的案例](https://github.com/petkaantonov/bluebird/wiki/Optimization-killers)，可以查看那些地方需要优化。 为这些而优化， 直到他们被修正。
+Modern browsers do a lot of optimization under-the-hood at runtime. A lot of
+times, if you are optimizing then you are just wasting your time. [There are good
+resources](https://github.com/petkaantonov/bluebird/wiki/Optimization-killers)
+for seeing where optimization is lacking. Target those in the meantime, until
+they are fixed if they can be.
 
 **Bad:**
 
@@ -883,11 +993,10 @@ for (let i = 0; i < list.length; i++) {
 }
 ```
 
-**[⬆ 回到顶部](#目录)**
+**[⬆ back to top](#table-of-contents)**
 
-### 移除僵尸代码
+### Remove dead code
 
-僵尸代码同冗余代码一样糟糕。我们没有理由容忍他们活在代码中。如果它没有被调用，那么删除它。等到需要它们的时候，可以从历史版本中找到它们。
 Dead code is just as bad as duplicate code. There's no reason to keep it in
 your codebase. If it's not being called, get rid of it! It will still be safe
 in your version history if you still need it.
@@ -918,19 +1027,23 @@ const req = newRequestModule;
 inventoryTracker("apples", req, "www.inventory-awesome.io");
 ```
 
-**[⬆ 回到顶部](#目录)**
+**[⬆ back to top](#table-of-contents)**
 
-## **对象与数据结构**
+## **Objects and Data Structures**
 
-### 使用 getters 和 setters
+### Use getters and setters
 
-在对象中使用 getters 和 setters 是比使用 property 更优的做法。你可能会问“为什么要这么做？”好吧，下面是列举的几条原因：
+Using getters and setters to access data on objects could be better than simply
+looking for a property on an object. "Why?" you might ask. Well, here's an
+unorganized list of reasons why:
 
-- 当你想要获取对象属性之外做更多的事情，你不需要在代码中查找和修改每一处访问
-- 使用 `set` 可以让数据验证变得简单
-- 封装内部实现
-- 在 `getting`、`setting` 时，可以更加容易的添加日志和错误处理
-- 可以延迟加载对象的属性，例如从服务端获取数据
+- When you want to do more beyond getting an object property, you don't have
+  to look up and change every accessor in your codebase.
+- Makes adding validation simple when doing a `set`.
+- Encapsulates the internal representation.
+- Easy to add logging and error handling when getting and setting.
+- You can lazy load your object's properties, let's say getting it from a
+  server.
 
 **Bad:**
 
@@ -977,11 +1090,11 @@ const account = makeBankAccount();
 account.setBalance(100);
 ```
 
-**[⬆ 回到顶部](#目录)**
+**[⬆ back to top](#table-of-contents)**
 
-### 使对象具有私有属性
+### Make objects have private members
 
-可以通过闭包来完成（针对于 ES5 及以下版本）
+This can be accomplished through closures (for ES5 and below).
 
 **Bad:**
 
@@ -1017,13 +1130,16 @@ delete employee.name;
 console.log(`Employee name: ${employee.getName()}`); // Employee name: John Doe
 ```
 
-**[⬆ 回到顶部](#目录)**
+**[⬆ back to top](#table-of-contents)**
 
-## **类**
+## **Classes**
 
-### ES2015/ES6 的类优先于 ES5 的纯函数
+### Prefer ES2015/ES6 classes over ES5 plain functions
 
-很难给经典的 ES5 类创建可读的继承，构造函数及放发等。如果你需要使用继承（讲道理你应该会用到），那么优先使用 ES2015/ES6 中的类。不过，短小的函数还优于类，在更大更复杂的对象上类是比较好的。
+It's very difficult to get readable class inheritance, construction, and method
+definitions for classical ES5 classes. If you need inheritance (and be aware
+that you might not), then prefer ES2015/ES6 classes. However, prefer small functions over
+classes until you find yourself needing larger and more complex objects.
 
 **Bad:**
 
@@ -1101,11 +1217,15 @@ class Human extends Mammal {
 }
 ```
 
-**[⬆ 回到顶部](#目录)**
+**[⬆ back to top](#table-of-contents)**
 
-### 使用方法链
+### Use method chaining
 
-这个模式在 JavaScript 中十分有用，你可能已经在很多库（如 jQuery、Lodash 等）中看到过了。它使得代码变得更有表现力，减少冗余。因为上面的原因，所以说推荐使用方法链之后再看看代码会变得多么整洁。在类/方法中，可以简单得在每个方法后面都 `return this`，然后就可以与这个类/方法中的其他方法链式调用。
+This pattern is very useful in JavaScript and you see it in many libraries such
+as jQuery and Lodash. It allows your code to be expressive, and less verbose.
+For that reason, I say, use method chaining and take a look at how clean your code
+will be. In your class functions, simply return `this` at the end of every function,
+and you can chain further class methods onto it.
 
 **Bad:**
 
@@ -1177,17 +1297,26 @@ class Car {
 const car = new Car("Ford", "F-150", "red").setColor("pink").save();
 ```
 
-**[⬆ 回到顶部](#目录)**
+**[⬆ back to top](#table-of-contents)**
 
-### 组合优先于继承
+### Prefer composition over inheritance
 
-如[设计模式](https://en.wikipedia.org/wiki/Design_Patterns)中提到，应该优先使用组合而不是继承。有很多理由去使用继承，也有很多理由去使用组合。如果你本能的观点是继承，那么请想一想组合能否更好的解决你的问题。很多情况下它是可以的。
+As stated famously in [_Design Patterns_](https://en.wikipedia.org/wiki/Design_Patterns) by the Gang of Four,
+you should prefer composition over inheritance where you can. There are lots of
+good reasons to use inheritance and lots of good reasons to use composition.
+The main point for this maxim is that if your mind instinctively goes for
+inheritance, try to think if composition could model your problem better. In some
+cases it can.
 
-那么你可能会想，什么时候我该使用继承？这取决于你手头的问题，下面几条关于什么时候继承比组合更好用的说明：
+You might be wondering then, "when should I use inheritance?" It
+depends on your problem at hand, but this is a decent list of when inheritance
+makes more sense than composition:
 
-1. 你的继承使用来表示 "is-a" 的关系而不是 "has-a" 的关系（例如：人 => 动物 VS 用户 => 用户详情）
-2. 你可以重用来自基类的代码（人可以复用所有动物的逻辑）
-3. 你想通过基类对子类进行全局的修改（改变所有动物行动时消耗的卡路里）
+1. Your inheritance represents an "is-a" relationship and not a "has-a"
+   relationship (Human->Animal vs. User->UserDetails).
+2. You can reuse code from the base classes (Humans can move like all animals).
+3. You want to make global changes to derived classes by changing a base class.
+   (Change the caloric expenditure of all animals when they move).
 
 **Bad:**
 
@@ -1238,13 +1367,20 @@ class Employee {
 }
 ```
 
-**[⬆ 回到顶部](#目录)**
+**[⬆ back to top](#table-of-contents)**
 
-## **原则**
+## **SOLID**
 
-### 单一职责原则 (SRP)
+### Single Responsibility Principle (SRP)
 
-如《代码简洁之道》中提到的，“修改一个类的理由不应该超过一个”。将多个功能塞进一个类的想法很诱人，但这将导致你的类无法达到概念上的内聚，并经常不得不进行修改。最小化对于一个类的修改次数是非常有必要的。如果一个类中包含着过多过杂的功能，当你只对其中一小部分修改时，将很难想象到这块修改会对依赖该类的其他模块造成怎样的影响。
+As stated in Clean Code, "There should never be more than one reason for a class
+to change". It's tempting to jam-pack a class with a lot of functionality, like
+when you can only take one suitcase on your flight. The issue with this is
+that your class won't be conceptually cohesive and it will give it many reasons
+to change. Minimizing the amount of times you need to change a class is important.
+It's important because if too much functionality is in one class and you modify
+a piece of it, it can be difficult to understand how that will affect other
+dependent modules in your codebase.
 
 **Bad:**
 
@@ -1293,11 +1429,14 @@ class UserSettings {
 }
 ```
 
-**[⬆ 回到顶部](#目录)**
+**[⬆ back to top](#table-of-contents)**
 
-### 开闭原则 (OCP)
+### Open/Closed Principle (OCP)
 
-如 Bertrand Meyer 所说，“软件实体（类，模块，函数等）应该易于拓展，难于修改。”。这意味着，我们应该允许用户方便的拓展我们代码模块的功能，而不需要打开 js 源码文件对其修改。
+As stated by Bertrand Meyer, "software entities (classes, modules, functions,
+etc.) should be open for extension, but closed for modification." What does that
+mean though? This principle basically states that you should allow users to
+add new functionalities without changing existing code.
 
 **Bad:**
 
@@ -1381,14 +1520,22 @@ class HttpRequester {
 }
 ```
 
-**[⬆ 回到顶部](#目录)**
+**[⬆ back to top](#table-of-contents)**
 
-### 里氏替换原则 (LSP)
+### Liskov Substitution Principle (LSP)
 
-对于一个简单的概念而言，这是一个听起来吓人的术语。它的正式定义是：“如果 S 是 T 的 子类型，那么类型为 T 的对象可以被类型为 S 的对象替换（例如，类型为 S 的对象可以作为类型为 T 的替代品）”不需要修改目标程序的期望性质（正确性、任务执行性等）。当然显然这也是一个糟糕的定义。
+This is a scary term for a very simple concept. It's formally defined as "If S
+is a subtype of T, then objects of type T may be replaced with objects of type S
+(i.e., objects of type S may substitute objects of type T) without altering any
+of the desirable properties of that program (correctness, task performed,
+etc.)." That's an even scarier definition.
 
-更好的解释是：“子类对象应该能够替换其超类对象被使用”。也就是说，如果有一个父类和一个子类，当采用子类替换父类时不应该产生错误的结果。用一个经典的正方形和矩形作为例子，在数学上，一个正方形是矩形，但是“is-a”的关系使用继承来实现，很快将会遇到麻烦。
-
+The best explanation for this is if you have a parent class and a child class,
+then the base class and child class can be used interchangeably without getting
+incorrect results. This might still be confusing, so let's take a look at the
+classic Square-Rectangle example. Mathematically, a square is a rectangle, but
+if you model it using the "is-a" relationship via inheritance, you quickly
+get into trouble.
 
 **Bad:**
 
@@ -1492,15 +1639,23 @@ const shapes = [new Rectangle(4, 5), new Rectangle(4, 5), new Square(5)];
 renderLargeShapes(shapes);
 ```
 
-**[⬆ 回到顶部](#目录)**
+**[⬆ back to top](#table-of-contents)**
 
-### 接口隔离原则 (ISP)
+### Interface Segregation Principle (ISP)
 
-JavaScript 中没有接口这个概念，所以这个原则不像是其他语言那么严谨。但是，对于 JavaScript 这类弱类型语言，它依然很重要且有意义。
+JavaScript doesn't have interfaces so this principle doesn't apply as strictly
+as others. However, it's important and relevant even with JavaScript's lack of
+type system.
 
-接口隔离原则告诉我们：“客户端不应该依赖它所不需要的接口”。由于 JavaScript 是“duck typing”类型，所以接口都是隐式的。
+ISP states that "Clients should not be forced to depend upon interfaces that
+they do not use." Interfaces are implicit contracts in JavaScript because of
+duck typing.
 
-在 JavaScript 中能比较好的说明这个原则的是一个类需要一个巨大的配置对象。 不需要客户端去设置大量的选项是有益的， 因为多数情况下他们不需要全部的设置。 让它们变成可选的有助于防止出现一个“胖接口”。
+A good example to look at that demonstrates this principle in JavaScript is for
+classes that require large settings objects. Not requiring clients to setup
+huge amounts of options is beneficial, because most of the time they won't need
+all of the settings. Making them optional helps prevent having a
+"fat interface".
 
 **Bad:**
 
@@ -1562,18 +1717,30 @@ const $ = new DOMTraverser({
 });
 ```
 
-**[⬆ 回到顶部](#目录)**
+**[⬆ back to top](#table-of-contents)**
 
-### 依赖反转原则 (DIP)
+### Dependency Inversion Principle (DIP)
 
-这条原则阐述了两条重要的事情：
+This principle states two essential things:
 
-1. 高级模块不应该依赖低级模块，两者都应该依赖抽象接口
-2. 抽象接口应该脱离具体实现，具体实现应该依赖抽象接口。
+1. High-level modules should not depend on low-level modules. Both should
+   depend on abstractions.
+2. Abstractions should not depend upon details. Details should depend on
+   abstractions.
 
-这个概念刚开始理解可能会比较晦涩，但是你如果用过 AngularJS 的话，你应该看过通过依赖注入来实现这个原则，虽然他们的概念不同，但是依赖反转原则是让高级模块避免低级模块的细节和创建，可以通过 Dependency Injection (DI) 来实现。这样做的好处是降低模块间的耦合程度。耦合会导致代码难以重构，是一种非常糟糕的开发模式。
+This can be hard to understand at first, but if you've worked with AngularJS,
+you've seen an implementation of this principle in the form of Dependency
+Injection (DI). While they are not identical concepts, DIP keeps high-level
+modules from knowing the details of its low-level modules and setting them up.
+It can accomplish this through DI. A huge benefit of this is that it reduces
+the coupling between modules. Coupling is a very bad development pattern because
+it makes your code hard to refactor.
 
-就像上面说的那样，JavaScript 没有接口，所以被依赖的抽象都是隐式的。即一个对象/类的方法和属性直接暴露给另一个对象/类。在下面的例子中，任何一个 Request 模块的隐式 `InventoryTracker` 都回会有一个 `requestItems` 方法。
+As stated previously, JavaScript doesn't have interfaces so the abstractions
+that are depended upon are implicit contracts. That is to say, the methods
+and properties that an object/class exposes to another object/class. In the
+example below, the implicit contract is that any Request module for an
+`InventoryTracker` will have a `requestItems` method.
 
 **Bad:**
 
@@ -1653,15 +1820,26 @@ const inventoryTracker = new InventoryTracker(
 inventoryTracker.requestItems();
 ```
 
-**[⬆ 回到顶部](#目录)**
+**[⬆ back to top](#table-of-contents)**
 
-## **测试**
+## **Testing**
 
-测试比发布更加重要。如果你的项目没有测试或测试不够充分时，那么每次发布的时候你都不能确认有没有破坏其他地方。测试的量有你的团队决定，拥有 100% 覆盖率（所有语句和分支）是你高度自信和内心平静的源泉。这意味着需要一个伟大的测试框架，当然也需要一个好的 [覆盖率工具](https://gotwarlost.github.io/istanbul/)
+Testing is more important than shipping. If you have no tests or an
+inadequate amount, then every time you ship code you won't be sure that you
+didn't break anything. Deciding on what constitutes an adequate amount is up
+to your team, but having 100% coverage (all statements and branches) is how
+you achieve very high confidence and developer peace of mind. This means that
+in addition to having a great testing framework, you also need to use a
+[good coverage tool](https://gotwarlost.github.io/istanbul/).
 
-没有理由不写测试。这里有[大量优秀的测试框架](https://jstherightway.org/#testing-tools)，选一个适合你团队的就好。当为团队选择测试框架之后，加下来的目标是为生产的每一个新功能/模块都编写测试代码。如果你倾向于测试驱动开发（TDD），那就太棒了，但是要点是确定你在上线任意功能或重构现有功能之前，达到目标覆盖率。
+There's no excuse to not write tests. There are [plenty of good JS test frameworks](https://jstherightway.org/#testing-tools), so find one that your team prefers.
+When you find one that works for your team, then aim to always write tests
+for every new feature/module you introduce. If your preferred method is
+Test Driven Development (TDD), that is great, but the main point is to just
+make sure you are reaching your coverage goals before launching any feature,
+or refactoring an existing one.
 
-### 一个措施一个概念
+### Single concept per test
 
 **Bad:**
 
@@ -1713,13 +1891,14 @@ describe("MomentJS", () => {
 });
 ```
 
-**[⬆ 回到顶部](#目录)**
+**[⬆ back to top](#table-of-contents)**
 
-## **并发**
+## **Concurrency**
 
-### 使用 Promise，避免回调
+### Use Promises, not callbacks
 
-回调不够简洁且会造成大量的嵌套。在 `ES2015/ES6` 中内置了 Promise，尽管用它吧~
+Callbacks aren't clean, and they cause excessive amounts of nesting. With ES2015/ES6,
+Promises are a built-in global type. Use them!
 
 **Bad:**
 
@@ -1763,11 +1942,15 @@ get("https://en.wikipedia.org/wiki/Robert_Cecil_Martin")
   });
 ```
 
-**[⬆ 回到顶部](#目录)**
+**[⬆ back to top](#table-of-contents)**
 
-### Async/Await 是 Promises 更好的选择
+### Async/Await are even cleaner than Promises
 
-Promise 较回调而言是一种更好的选择，然而在 `ES2017/ES8` 中的 async/await 提供了更为简洁的解决方案。你需要做的只是在相关函数前增加 `async` 关键字，接下来就不需要在 `then` 函数链中编写逻辑。如果你能使用 `ES2017/ES8` 的高级功能， 那么尽管使用它吧！
+Promises are a very clean alternative to callbacks, but ES2017/ES8 brings async and await
+which offer an even cleaner solution. All you need is a function that is prefixed
+in an `async` keyword, and then you can write your logic imperatively without
+a `then` chain of functions. Use this if you can take advantage of ES2017/ES8 features
+today!
 
 **Bad:**
 
@@ -1808,15 +1991,23 @@ async function getCleanCodeArticle() {
 getCleanCodeArticle()
 ```
 
-**[⬆ 回到顶部](#目录)**
+**[⬆ back to top](#table-of-contents)**
 
-## **错误处理**
+## **Error Handling**
 
-抛出错误是件好事情。它们表示你当前程序存在错误，运行时可以成捕获，并且通过停止执行当前堆栈上的函数来让开发者知晓，结束当前进程（在 Node 中），并在控制台中输出堆栈跟踪来提示开发者。
+Thrown errors are a good thing! They mean the runtime has successfully
+identified when something in your program has gone wrong and it's letting
+you know by stopping function execution on the current stack, killing the
+process (in Node), and notifying you in the console with a stack trace.
 
-### 不要忽略捕获到的问题
+### Don't ignore caught errors
 
-对于捕获到的错误不做任何处理是没有意义的。向控制台记录错误 (console.log) 也不怎么好， 因为往往会丢失在海量的控制台输出中。如果你把任意一段代码用 `try/catch` 包装那就意味着你想到这里可能会错， 因此你应该有个修复计划， 或者当错误发生时有一个代码路径。
+Doing nothing with a caught error doesn't give you the ability to ever fix
+or react to said error. Logging the error to the console (`console.log`)
+isn't much better as often times it can get lost in a sea of things printed
+to the console. If you wrap any bit of code in a `try/catch` it means you
+think an error may occur there and therefore you should have a plan,
+or create a code path, for when it occurs.
 
 **Bad:**
 
@@ -1844,9 +2035,10 @@ try {
 }
 ```
 
-### 不要忽略被拒绝的 promises
+### Don't ignore rejected promises
 
-理由同 try/catch。
+For the same reason you shouldn't ignore caught errors
+from `try/catch`.
 
 **Bad:**
 
@@ -1878,18 +2070,24 @@ getdata()
   });
 ```
 
-**[⬆ 回到顶部](#目录)**
+**[⬆ back to top](#table-of-contents)**
 
-## **格式化**
+## **Formatting**
 
-格式化是主观的。 就像其它规则一样， 没有必须让你遵守的硬性规则。重点不是为了格式化而争论，这里有 [大量工具](https://standardjs.com/rules.html) 可以自动化做格式化工作，使用其中一个即可。做为工程师去争论格式化就是在浪费时间和金钱！
+Formatting is subjective. Like many rules herein, there is no hard and fast
+rule that you must follow. The main point is DO NOT ARGUE over formatting.
+There are [tons of tools](https://standardjs.com/rules.html) to automate this.
+Use one! It's a waste of time and money for engineers to argue over formatting.
 
-针对自动格式化工具不能涵盖的问题（缩进、制表符还是空格、双引号还是单引号等），这里有一些指南。
+For things that don't fall under the purview of automatic formatting
+(indentation, tabs vs. spaces, double vs. single quotes, etc.) look here
+for some guidance.
 
-### 使用一致的大小写
+### Use consistent capitalization
 
-JavaScript 是弱类型语言， 合理的采用大小写可以告诉你关于变量/函数等的许多消息。这些规定都是主观的，所以你的团队可以自行选择。重点在于无论选择何种风格，都需要注意保持一致性。
-
+JavaScript is untyped, so capitalization tells you a lot about your variables,
+functions, etc. These rules are subjective, so your team can choose whatever
+they want. The point is, no matter what you all choose, just be consistent.
 
 **Bad:**
 
@@ -1923,11 +2121,13 @@ class Animal {}
 class Alpaca {}
 ```
 
-**[⬆ 回到顶部](#目录)**
+**[⬆ back to top](#table-of-contents)**
 
-### 调用函数的函数和被调函数应放在较近的位置
+### Function callers and callees should be close
 
-如果一个函数调用另一个， 则在代码中这两个函数的竖直位置应该靠近。 理想情况下，保持被调用函数在被调用函数的正上方。我们倾向于从上到下阅读代码，就像读一章报纸。由于这个原因，所以保持你的代码可以按照这种方式阅读。
+If a function calls another, keep those functions vertically close in the source
+file. Ideally, keep the caller right above the callee. We tend to read code from
+top-to-bottom, like a newspaper. Because of this, make your code read that way.
 
 **Bad:**
 
@@ -2009,13 +2209,13 @@ const review = new PerformanceReview(employee);
 review.perfReview();
 ```
 
-**[⬆ 回到顶部](#目录)**
+**[⬆ back to top](#table-of-contents)**
 
-## **注释**
+## **Comments**
 
-### 只对存在一定业务逻辑复杂性的代码进行注释
+### Only comment things that have business logic complexity.
 
-注释是代码的辩解，不是要求。多数情况下，好的代码就是文档。
+Comments are an apology, not a requirement. Good code _mostly_ documents itself.
 
 **Bad:**
 
@@ -2056,11 +2256,11 @@ function hashIt(data) {
 }
 ```
 
-**[⬆ 回到顶部](#目录)**
+**[⬆ back to top](#table-of-contents)**
 
-### D不要在代码库中保存注释掉的代码
+### Don't leave commented out code in your codebase
 
-因为有版本控制（git、svn），把旧的代码留在历史记录即可。
+Version control exists for a reason. Leave old code in your history.
 
 **Bad:**
 
@@ -2077,11 +2277,12 @@ doStuff();
 doStuff();
 ```
 
-**[⬆ 回到顶部](#目录)**
+**[⬆ back to top](#table-of-contents)**
 
-### 不要有日志式的注释
+### Don't have journal comments
 
-记住，使用版本控制！不需要僵尸代码，注释掉的代码，尤其是日志式的注释。使用 `git log` 来 获取历史记录。
+Remember, use version control! There's no need for dead code, commented code,
+and especially journal comments. Use `git log` to get history!
 
 **Bad:**
 
@@ -2105,11 +2306,12 @@ function combine(a, b) {
 }
 ```
 
-**[⬆ 回到顶部](#目录)**
+**[⬆ back to top](#table-of-contents)**
 
-### 避免占位符
+### Avoid positional markers
 
-它们仅仅添加了干扰。让函数和变量名称与合适的缩进和格式化为你的代码提供视觉结构。
+They usually just add noise. Let the functions and variable names along with the
+proper indentation and formatting give the visual structure to your code.
 
 **Bad:**
 
@@ -2143,11 +2345,11 @@ const actions = function() {
 };
 ```
 
-**[⬆ 回到顶部](#目录)**
+**[⬆ back to top](#table-of-contents)**
 
-## 翻译
+## Translation
 
-下面是一些翻译版本:
+This is also available in other languages:
 
 - ![fr](https://raw.githubusercontent.com/gosquared/flags/master/flags/flags/shiny/24/France.png) **French**:
   [GavBaros/clean-code-javascript-fr](https://github.com/GavBaros/clean-code-javascript-fr)
@@ -2171,4 +2373,4 @@ const actions = function() {
 - ![it](https://raw.githubusercontent.com/gosquared/flags/master/flags/flags/shiny/24/Italy.png) **Italian**:
   [frappacchio/clean-code-javascript/](https://github.com/frappacchio/clean-code-javascript/)
 
-**[⬆ 回到顶部](#目录)**
+**[⬆ back to top](#table-of-contents)**
