@@ -920,21 +920,17 @@ inventoryTracker("apples", req, "www.inventory-awesome.io");
 
 **[⬆ 回到顶部](#目录)**
 
-## **对象和数据结构**
+## **对象与数据结构**
 
-### Use getters and setters
+### 使用 getters 和 setters
 
-Using getters and setters to access data on objects could be better than simply
-looking for a property on an object. "Why?" you might ask. Well, here's an
-unorganized list of reasons why:
+在对象中使用 getters 和 setters 是比使用 property 更优的做法。你可能会问“为什么要这么做？”好吧，下面是列举的几条原因：
 
-- When you want to do more beyond getting an object property, you don't have
-  to look up and change every accessor in your codebase.
-- Makes adding validation simple when doing a `set`.
-- Encapsulates the internal representation.
-- Easy to add logging and error handling when getting and setting.
-- You can lazy load your object's properties, let's say getting it from a
-  server.
+- 当你想要获取对象属性之外做更多的事情，你不需要在代码中查找和修改每一处访问
+- 使用 `set` 可以让数据验证变得简单
+- 封装内部实现
+- 在 `getting`、`setting` 时，可以更加容易的添加日志和错误处理
+- 可以延迟加载对象的属性，例如从服务端获取数据
 
 **Bad:**
 
@@ -983,9 +979,9 @@ account.setBalance(100);
 
 **[⬆ 回到顶部](#目录)**
 
-### Make objects have private members
+### 使对象具有私有属性
 
-This can be accomplished through closures (for ES5 and below).
+可以通过闭包来完成（针对于 ES5 及以下版本）
 
 **Bad:**
 
@@ -1023,14 +1019,11 @@ console.log(`Employee name: ${employee.getName()}`); // Employee name: John Doe
 
 **[⬆ 回到顶部](#目录)**
 
-## **Classes**
+## **类**
 
-### Prefer ES2015/ES6 classes over ES5 plain functions
+### ES2015/ES6 的类优先于 ES5 的纯函数
 
-It's very difficult to get readable class inheritance, construction, and method
-definitions for classical ES5 classes. If you need inheritance (and be aware
-that you might not), then prefer ES2015/ES6 classes. However, prefer small functions over
-classes until you find yourself needing larger and more complex objects.
+很难给经典的 ES5 类创建可读的继承，构造函数及放发等。如果你需要使用继承（讲道理你应该会用到），那么优先使用 ES2015/ES6 中的类。不过，短小的函数还优于类，在更大更复杂的对象上类是比较好的。
 
 **Bad:**
 
@@ -1110,13 +1103,9 @@ class Human extends Mammal {
 
 **[⬆ 回到顶部](#目录)**
 
-### Use method chaining
+### 使用方法链
 
-This pattern is very useful in JavaScript and you see it in many libraries such
-as jQuery and Lodash. It allows your code to be expressive, and less verbose.
-For that reason, I say, use method chaining and take a look at how clean your code
-will be. In your class functions, simply return `this` at the end of every function,
-and you can chain further class methods onto it.
+这个模式在 JavaScript 中十分有用，你可能已经在很多库（如 jQuery、Lodash 等）中看到过了。它使得代码变得更有表现力，减少冗余。因为上面的原因，所以说推荐使用方法链之后再看看代码会变得多么整洁。在类/方法中，可以简单得在每个方法后面都 `return this`，然后就可以与这个类/方法中的其他方法链式调用。
 
 **Bad:**
 
@@ -1190,24 +1179,15 @@ const car = new Car("Ford", "F-150", "red").setColor("pink").save();
 
 **[⬆ 回到顶部](#目录)**
 
-### Prefer composition over inheritance
+### 组合优先于继承
 
-As stated famously in [_Design Patterns_](https://en.wikipedia.org/wiki/Design_Patterns) by the Gang of Four,
-you should prefer composition over inheritance where you can. There are lots of
-good reasons to use inheritance and lots of good reasons to use composition.
-The main point for this maxim is that if your mind instinctively goes for
-inheritance, try to think if composition could model your problem better. In some
-cases it can.
+如[设计模式](https://en.wikipedia.org/wiki/Design_Patterns)中提到，应该优先使用组合而不是继承。有很多理由去使用继承，也有很多理由去使用组合。如果你本能的观点是继承，那么请想一想组合能否更好的解决你的问题。很多情况下它是可以的。
 
-You might be wondering then, "when should I use inheritance?" It
-depends on your problem at hand, but this is a decent list of when inheritance
-makes more sense than composition:
+那么你可能会想，什么时候我该使用继承？这取决于你手头的问题，下面几条关于什么时候继承比组合更好用的说明：
 
-1. Your inheritance represents an "is-a" relationship and not a "has-a"
-   relationship (Human->Animal vs. User->UserDetails).
-2. You can reuse code from the base classes (Humans can move like all animals).
-3. You want to make global changes to derived classes by changing a base class.
-   (Change the caloric expenditure of all animals when they move).
+1. 你的继承使用来表示 "is-a" 的关系而不是 "has-a" 的关系（例如：人 => 动物 VS 用户 => 用户详情）
+2. 你可以重用来自基类的代码（人可以复用所有动物的逻辑）
+3. 你想通过基类对子类进行全局的修改（改变所有动物行动时消耗的卡路里）
 
 **Bad:**
 
@@ -1260,18 +1240,11 @@ class Employee {
 
 **[⬆ 回到顶部](#目录)**
 
-## **SOLID**
+## **原则**
 
-### Single Responsibility Principle (SRP)
+### 单一职责原则 (SRP)
 
-As stated in Clean Code, "There should never be more than one reason for a class
-to change". It's tempting to jam-pack a class with a lot of functionality, like
-when you can only take one suitcase on your flight. The issue with this is
-that your class won't be conceptually cohesive and it will give it many reasons
-to change. Minimizing the amount of times you need to change a class is important.
-It's important because if too much functionality is in one class and you modify
-a piece of it, it can be difficult to understand how that will affect other
-dependent modules in your codebase.
+如《代码简洁之道》中提到的，“修改一个类的理由不应该超过一个”。将多个功能塞进一个类的想法很诱人，但这将导致你的类无法达到概念上的内聚，并经常不得不进行修改。最小化对于一个类的修改次数是非常有必要的。如果一个类中包含着过多过杂的功能，当你只对其中一小部分修改时，将很难想象到这块修改会对依赖该类的其他模块造成怎样的影响。
 
 **Bad:**
 
@@ -1322,12 +1295,9 @@ class UserSettings {
 
 **[⬆ 回到顶部](#目录)**
 
-### Open/Closed Principle (OCP)
+### 开闭原则 (OCP)
 
-As stated by Bertrand Meyer, "software entities (classes, modules, functions,
-etc.) should be open for extension, but closed for modification." What does that
-mean though? This principle basically states that you should allow users to
-add new functionalities without changing existing code.
+如 Bertrand Meyer 所说，“软件实体（类，模块，函数等）应该易于拓展，难于修改。”。这意味着，我们应该允许用户方便的拓展我们代码模块的功能，而不需要打开 js 源码文件对其修改。
 
 **Bad:**
 
@@ -1413,20 +1383,12 @@ class HttpRequester {
 
 **[⬆ 回到顶部](#目录)**
 
-### Liskov Substitution Principle (LSP)
+### 里氏替换原则 (LSP)
 
-This is a scary term for a very simple concept. It's formally defined as "If S
-is a subtype of T, then objects of type T may be replaced with objects of type S
-(i.e., objects of type S may substitute objects of type T) without altering any
-of the desirable properties of that program (correctness, task performed,
-etc.)." That's an even scarier definition.
+对于一个简单的概念而言，这是一个听起来吓人的术语。它的正式定义是：“如果 S 是 T 的 子类型，那么类型为 T 的对象可以被类型为 S 的对象替换（例如，类型为 S 的对象可以作为类型为 T 的替代品）”不需要修改目标程序的期望性质（正确性、任务执行性等）。当然显然这也是一个糟糕的定义。
 
-The best explanation for this is if you have a parent class and a child class,
-then the base class and child class can be used interchangeably without getting
-incorrect results. This might still be confusing, so let's take a look at the
-classic Square-Rectangle example. Mathematically, a square is a rectangle, but
-if you model it using the "is-a" relationship via inheritance, you quickly
-get into trouble.
+更好的解释是：“子类对象应该能够替换其超类对象被使用”。也就是说，如果有一个父类和一个子类，当采用子类替换父类时不应该产生错误的结果。用一个经典的正方形和矩形作为例子，在数学上，一个正方形是矩形，但是“is-a”的关系使用继承来实现，很快将会遇到麻烦。
+
 
 **Bad:**
 
@@ -1532,21 +1494,13 @@ renderLargeShapes(shapes);
 
 **[⬆ 回到顶部](#目录)**
 
-### Interface Segregation Principle (ISP)
+### 接口隔离原则 (ISP)
 
-JavaScript doesn't have interfaces so this principle doesn't apply as strictly
-as others. However, it's important and relevant even with JavaScript's lack of
-type system.
+JavaScript 中没有接口这个概念，所以这个原则不像是其他语言那么严谨。但是，对于 JavaScript 这类弱类型语言，它依然很重要且有意义。
 
-ISP states that "Clients should not be forced to depend upon interfaces that
-they do not use." Interfaces are implicit contracts in JavaScript because of
-duck typing.
+接口隔离原则告诉我们：“客户端不应该依赖它所不需要的接口”。由于 JavaScript 是“duck typing”类型，所以接口都是隐式的。
 
-A good example to look at that demonstrates this principle in JavaScript is for
-classes that require large settings objects. Not requiring clients to setup
-huge amounts of options is beneficial, because most of the time they won't need
-all of the settings. Making them optional helps prevent having a
-"fat interface".
+在 JavaScript 中能比较好的说明这个原则的是一个类需要一个巨大的配置对象。 不需要客户端去设置大量的选项是有益的， 因为多数情况下他们不需要全部的设置。 让它们变成可选的有助于防止出现一个“胖接口”。
 
 **Bad:**
 
@@ -1610,28 +1564,16 @@ const $ = new DOMTraverser({
 
 **[⬆ 回到顶部](#目录)**
 
-### Dependency Inversion Principle (DIP)
+### 依赖反转原则 (DIP)
 
-This principle states two essential things:
+这条原则阐述了两条重要的事情：
 
-1. High-level modules should not depend on low-level modules. Both should
-   depend on abstractions.
-2. Abstractions should not depend upon details. Details should depend on
-   abstractions.
+1. 高级模块不应该依赖低级模块，两者都应该依赖抽象接口
+2. 抽象接口应该脱离具体实现，具体实现应该依赖抽象接口。
 
-This can be hard to understand at first, but if you've worked with AngularJS,
-you've seen an implementation of this principle in the form of Dependency
-Injection (DI). While they are not identical concepts, DIP keeps high-level
-modules from knowing the details of its low-level modules and setting them up.
-It can accomplish this through DI. A huge benefit of this is that it reduces
-the coupling between modules. Coupling is a very bad development pattern because
-it makes your code hard to refactor.
+这个概念刚开始理解可能会比较晦涩，但是你如果用过 AngularJS 的话，你应该看过通过依赖注入来实现这个原则，虽然他们的概念不同，但是依赖反转原则是让高级模块避免低级模块的细节和创建，可以通过 Dependency Injection (DI) 来实现。这样做的好处是降低模块间的耦合程度。耦合会导致代码难以重构，是一种非常糟糕的开发模式。
 
-As stated previously, JavaScript doesn't have interfaces so the abstractions
-that are depended upon are implicit contracts. That is to say, the methods
-and properties that an object/class exposes to another object/class. In the
-example below, the implicit contract is that any Request module for an
-`InventoryTracker` will have a `requestItems` method.
+就像上面说的那样，JavaScript 没有接口，所以被依赖的抽象都是隐式的。即一个对象/类的方法和属性直接暴露给另一个对象/类。在下面的例子中，任何一个 Request 模块的隐式 `InventoryTracker` 都回会有一个 `requestItems` 方法。
 
 **Bad:**
 
@@ -1713,24 +1655,13 @@ inventoryTracker.requestItems();
 
 **[⬆ 回到顶部](#目录)**
 
-## **Testing**
+## **测试**
 
-Testing is more important than shipping. If you have no tests or an
-inadequate amount, then every time you ship code you won't be sure that you
-didn't break anything. Deciding on what constitutes an adequate amount is up
-to your team, but having 100% coverage (all statements and branches) is how
-you achieve very high confidence and developer peace of mind. This means that
-in addition to having a great testing framework, you also need to use a
-[good coverage tool](https://gotwarlost.github.io/istanbul/).
+测试比发布更加重要。如果你的项目没有测试或测试不够充分时，那么每次发布的时候你都不能确认有没有破坏其他地方。测试的量有你的团队决定，拥有 100% 覆盖率（所有语句和分支）是你高度自信和内心平静的源泉。这意味着需要一个伟大的测试框架，当然也需要一个好的 [覆盖率工具](https://gotwarlost.github.io/istanbul/)
 
-There's no excuse to not write tests. There are [plenty of good JS test frameworks](https://jstherightway.org/#testing-tools), so find one that your team prefers.
-When you find one that works for your team, then aim to always write tests
-for every new feature/module you introduce. If your preferred method is
-Test Driven Development (TDD), that is great, but the main point is to just
-make sure you are reaching your coverage goals before launching any feature,
-or refactoring an existing one.
+没有理由不写测试。这里有[大量优秀的测试框架](https://jstherightway.org/#testing-tools)，选一个适合你团队的就好。当为团队选择测试框架之后，加下来的目标是为生产的每一个新功能/模块都编写测试代码。如果你倾向于测试驱动开发（TDD），那就太棒了，但是要点是确定你在上线任意功能或重构现有功能之前，达到目标覆盖率。
 
-### Single concept per test
+### 一个措施一个概念
 
 **Bad:**
 
@@ -1784,12 +1715,11 @@ describe("MomentJS", () => {
 
 **[⬆ 回到顶部](#目录)**
 
-## **Concurrency**
+## **并发**
 
-### Use Promises, not callbacks
+### 使用 Promise，避免回调
 
-Callbacks aren't clean, and they cause excessive amounts of nesting. With ES2015/ES6,
-Promises are a built-in global type. Use them!
+回调不够简洁且会造成大量的嵌套。在 `ES2015/ES6` 中内置了 Promise，尽管用它吧~
 
 **Bad:**
 
@@ -1835,13 +1765,9 @@ get("https://en.wikipedia.org/wiki/Robert_Cecil_Martin")
 
 **[⬆ 回到顶部](#目录)**
 
-### Async/Await are even cleaner than Promises
+### Async/Await 是 Promises 更好的选择
 
-Promises are a very clean alternative to callbacks, but ES2017/ES8 brings async and await
-which offer an even cleaner solution. All you need is a function that is prefixed
-in an `async` keyword, and then you can write your logic imperatively without
-a `then` chain of functions. Use this if you can take advantage of ES2017/ES8 features
-today!
+Promise 较回调而言是一种更好的选择，然而在 `ES2017/ES8` 中的 async/await 提供了更为简洁的解决方案。你需要做的只是在相关函数前增加 `async` 关键字，接下来就不需要在 `then` 函数链中编写逻辑。如果你能使用 `ES2017/ES8` 的高级功能， 那么尽管使用它吧！
 
 **Bad:**
 
@@ -1884,21 +1810,13 @@ getCleanCodeArticle()
 
 **[⬆ 回到顶部](#目录)**
 
-## **Error Handling**
+## **错误处理**
 
-Thrown errors are a good thing! They mean the runtime has successfully
-identified when something in your program has gone wrong and it's letting
-you know by stopping function execution on the current stack, killing the
-process (in Node), and notifying you in the console with a stack trace.
+抛出错误是件好事情。它们表示你当前程序存在错误，运行时可以成捕获，并且通过停止执行当前堆栈上的函数来让开发者知晓，结束当前进程（在 Node 中），并在控制台中输出堆栈跟踪来提示开发者。
 
-### Don't ignore caught errors
+### 不要忽略捕获到的问题
 
-Doing nothing with a caught error doesn't give you the ability to ever fix
-or react to said error. Logging the error to the console (`console.log`)
-isn't much better as often times it can get lost in a sea of things printed
-to the console. If you wrap any bit of code in a `try/catch` it means you
-think an error may occur there and therefore you should have a plan,
-or create a code path, for when it occurs.
+对于捕获到的错误不做任何处理是没有意义的。向控制台记录错误 (console.log) 也不怎么好， 因为往往会丢失在海量的控制台输出中。如果你把任意一段代码用 `try/catch` 包装那就意味着你想到这里可能会错， 因此你应该有个修复计划， 或者当错误发生时有一个代码路径。
 
 **Bad:**
 
@@ -1926,10 +1844,9 @@ try {
 }
 ```
 
-### Don't ignore rejected promises
+### 不要忽略被拒绝的 promises
 
-For the same reason you shouldn't ignore caught errors
-from `try/catch`.
+理由同 try/catch。
 
 **Bad:**
 
@@ -1963,22 +1880,16 @@ getdata()
 
 **[⬆ 回到顶部](#目录)**
 
-## **Formatting**
+## **格式化**
 
-Formatting is subjective. Like many rules herein, there is no hard and fast
-rule that you must follow. The main point is DO NOT ARGUE over formatting.
-There are [tons of tools](https://standardjs.com/rules.html) to automate this.
-Use one! It's a waste of time and money for engineers to argue over formatting.
+格式化是主观的。 就像其它规则一样， 没有必须让你遵守的硬性规则。重点不是为了格式化而争论，这里有 [大量工具](https://standardjs.com/rules.html) 可以自动化做格式化工作，使用其中一个即可。做为工程师去争论格式化就是在浪费时间和金钱！
 
-For things that don't fall under the purview of automatic formatting
-(indentation, tabs vs. spaces, double vs. single quotes, etc.) look here
-for some guidance.
+针对自动格式化工具不能涵盖的问题（缩进、制表符还是空格、双引号还是单引号等），这里有一些指南。
 
-### Use consistent capitalization
+### 使用一致的大小写
 
-JavaScript is untyped, so capitalization tells you a lot about your variables,
-functions, etc. These rules are subjective, so your team can choose whatever
-they want. The point is, no matter what you all choose, just be consistent.
+JavaScript 是弱类型语言， 合理的采用大小写可以告诉你关于变量/函数等的许多消息。这些规定都是主观的，所以你的团队可以自行选择。重点在于无论选择何种风格，都需要注意保持一致性。
+
 
 **Bad:**
 
@@ -2014,11 +1925,9 @@ class Alpaca {}
 
 **[⬆ 回到顶部](#目录)**
 
-### Function callers and callees should be close
+### 调用函数的函数和被调函数应放在较近的位置
 
-If a function calls another, keep those functions vertically close in the source
-file. Ideally, keep the caller right above the callee. We tend to read code from
-top-to-bottom, like a newspaper. Because of this, make your code read that way.
+如果一个函数调用另一个， 则在代码中这两个函数的竖直位置应该靠近。 理想情况下，保持被调用函数在被调用函数的正上方。我们倾向于从上到下阅读代码，就像读一章报纸。由于这个原因，所以保持你的代码可以按照这种方式阅读。
 
 **Bad:**
 
@@ -2102,11 +2011,11 @@ review.perfReview();
 
 **[⬆ 回到顶部](#目录)**
 
-## **Comments**
+## **注释**
 
-### Only comment things that have business logic complexity.
+### 只对存在一定业务逻辑复杂性的代码进行注释
 
-Comments are an apology, not a requirement. Good code _mostly_ documents itself.
+注释是代码的辩解，不是要求。多数情况下，好的代码就是文档。
 
 **Bad:**
 
@@ -2149,9 +2058,9 @@ function hashIt(data) {
 
 **[⬆ 回到顶部](#目录)**
 
-### Don't leave commented out code in your codebase
+### D不要在代码库中保存注释掉的代码
 
-Version control exists for a reason. Leave old code in your history.
+因为有版本控制（git、svn），把旧的代码留在历史记录即可。
 
 **Bad:**
 
@@ -2170,10 +2079,9 @@ doStuff();
 
 **[⬆ 回到顶部](#目录)**
 
-### Don't have journal comments
+### 不要有日志式的注释
 
-Remember, use version control! There's no need for dead code, commented code,
-and especially journal comments. Use `git log` to get history!
+记住，使用版本控制！不需要僵尸代码，注释掉的代码，尤其是日志式的注释。使用 `git log` 来 获取历史记录。
 
 **Bad:**
 
@@ -2199,10 +2107,9 @@ function combine(a, b) {
 
 **[⬆ 回到顶部](#目录)**
 
-### Avoid positional markers
+### 避免占位符
 
-They usually just add noise. Let the functions and variable names along with the
-proper indentation and formatting give the visual structure to your code.
+它们仅仅添加了干扰。让函数和变量名称与合适的缩进和格式化为你的代码提供视觉结构。
 
 **Bad:**
 
@@ -2238,9 +2145,9 @@ const actions = function() {
 
 **[⬆ 回到顶部](#目录)**
 
-## Translation
+## 翻译
 
-This is also available in other languages:
+下面是一些翻译版本:
 
 - ![fr](https://raw.githubusercontent.com/gosquared/flags/master/flags/flags/shiny/24/France.png) **French**:
   [GavBaros/clean-code-javascript-fr](https://github.com/GavBaros/clean-code-javascript-fr)
